@@ -1,22 +1,39 @@
-from flask import Flask, render_template, request
+from calendar import error
+from crypt import methods
+from idlelib.iomenu import errors
+
+from flask import Flask, render_template, request, render_template_string
+from pyexpat.errors import messages
 
 app = Flask(__name__)
 
-# Route for the home page
-@app.route('/')
-def index():
-    return render_template('index.html')
+@app.route("/", methods=['GET'])
+def contact_form():
+    return render_template_string('contact_form.html')
 
-# Route for the contact page
-@app.route('/contact', methods=['GET', 'POST'])
-def contact():
-    if request.method == 'POST':
-        name = request.form['name']
-        email = request.form['email']
-        message = request.form['message']
-        # You could save these details to a database or send via email
-        return render_template('contact.html', name=name, email=email, message=message)
-    return render_template('contact.html', name=None, email=None, message=None)
+@app.route("/submit", methods=['POST'])
+def submit():
+    name = request.form.get('name')
+    email = request.form.get('email')
+    phone = request.form.get('phone')
+    message = request.form.get('message')
+    subject = request.form.get('subject')
+    custom_subject = request.form.get('custom_subject')
+    contact_methods = request.form.getlist('contact_methods')
+    agreement = request.form.get('agreement')
 
-if __name__ == "__main__":
-    app.run(debug=True)
+    errors: list = []
+
+    if not name or not email or not phone or not message:
+        errors.appends("All fields except custom subject must be filled.")
+
+    if not phone.isdigit():
+        errors.append("Phone number must be numeric.")
+
+    if subject == "Other" and not other_subject:
+
+
+
+
+
+
